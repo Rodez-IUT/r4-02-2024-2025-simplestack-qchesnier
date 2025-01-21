@@ -53,6 +53,9 @@ public class SimpleStack implements Stack {
      */
     @Override
     public Item pop() throws EmptyStackException {
+        if (this.pile.isEmpty()) {
+            throw new EmptyStackException();
+        }
         return this.pile.remove(this.pile.size() - 1);
     }
 }
