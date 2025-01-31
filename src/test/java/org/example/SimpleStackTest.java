@@ -1,20 +1,25 @@
 package org.example;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Test behaviour of a SimpleStack")
 class SimpleStackTest {
 
-    @Test
-    @DisplayName("Test the state of a newly created slack")
-    public void testCreateEmptyStack() { // Test case
+    private Stack stack;
+    private Item item;
 
-        // When a freshly stack is created
-        Stack stack = new SimpleStack();
+    @BeforeEach
+    public void initializeStack() {
+        // Given an empty stack and an item
+        stack = new SimpleStack();
+        item = new SimpleItem();
+    }
+
+    @Test
+    @DisplayName("Test the state of a newly created stack")
+    public void testCreateEmptyStack() { // Test case
 
         // Then… (oracle)
         assertTrue(stack.isEmpty(), "A new stack must be empty");
@@ -24,10 +29,6 @@ class SimpleStackTest {
     @Test
     @DisplayName("Test the push of items")
     public void testPush() throws EmptyStackException {
-
-        // Given an empty stack and an item
-        Stack stack = new SimpleStack();
-        Item item = new SimpleItem();
 
         // When the item is pushed in the stack
         stack.push(item);
@@ -50,14 +51,45 @@ class SimpleStackTest {
     }
 
     @Test
-    @Disabled
+    @DisplayName("Test the peek of the stack")
+    public void testPeek() throws EmptyStackException {
+        // Given a stack with 2 items
+        Item object1 = new SimpleItem();
+        Item object2 = new SimpleItem();
+        stack.push(object1);
+        stack.push(object2);
+
+        // When take the peek of the stack, must return the item on the top of the stack
+        assertEquals(stack.peek(), object2, "The item return is on the top of the stack");
+    }
+
+    @Test
+    @DisplayName("Test the peek of the stack")
+    public void testPeekOnEmptyStack() throws EmptyStackException {
+        // When take the peek of the stack, must throw an EmptyStackException.
+        assertThrows(EmptyStackException.class, ()->stack.peek(), "EmptyStackException not thrown");
+    }
+
+    @Test
     @DisplayName("Test limit when trying to pop an empty stack")
     public void testPopOnEmptyStack()  {
-        // Given an empty stack
-        Stack stack = new SimpleStack();
-
-        // When we "pop" the stack, should throws an EmptyStackException.
-        //assertThrows(EmptyStackException.class, ()->stack.pop(), "EmptyStackException not thrown");
+        // When we "pop" the stack, should throw an EmptyStackException.
+        assertThrows(EmptyStackException.class, ()->stack.pop(), "EmptyStackException not thrown");
         assertThrows(EmptyStackException.class, stack::pop, "EmptyStackException not thrown");
+    }
+
+    @Test
+    @DisplayName("Test limit when trying to pop a stack")
+    public void testPopOnStack() throws EmptyStackException {
+        // Given a stack with 2 items
+        stack.push(item);
+
+        // When we "pop" the stack, the stack should have a size equal to 1.
+        Item itemPop = stack.pop();
+
+        // Then the stack should have a size equal to 1.
+        assertTrue(stack.isEmpty(), "Stack not empty.");
+        // And the item pop is the one which got pop
+        assertEquals(item, itemPop, "object not throw.");
     }
 }
