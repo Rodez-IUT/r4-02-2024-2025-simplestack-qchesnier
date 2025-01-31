@@ -42,7 +42,11 @@ public class SimpleStack implements Stack {
      */
     @Override
     public Item peek() throws EmptyStackException {
-        return this.pile.get(this.pile.size() - 1);
+        if (this.pile.isEmpty()) {
+            throw new EmptyStackException();
+        } else {
+            return this.pile.get(this.pile.size() - 1);
+        }
     }
 
     /**
